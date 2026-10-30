@@ -2,6 +2,8 @@
 
 **Model-agnostic engineering guidance for coding agents.** Deliver the smallest complete solution that meets real requirements, while retaining necessary safeguards and meaningful verification.
 
+Use this skill to avoid **overengineering** during implementation, bug fixes, refactoring, and **code review**. Aim for a **minimal complete solution**, not merely fewer lines of code. It also guides agents to give concise, non-repetitive answers and distinguish reversible implementation choices from decisions that require clarification. The full instructions are in Traditional Chinese, with an English discovery description; they are not tied to a specific model or vendor.
+
 適用於各種 coding agent 的繁體中文技能：避免過度工程，讓實作、修復、重構及程式碼審查的複雜度與需求、契約和實際風險成比例。
 
 ## 核心原則
@@ -12,6 +14,8 @@
 - 保留授權、信任邊界、資料完整性等必要防護。
 - 驗證公開行為與實際回歸，不堆疊只照抄實作的測試。
 - 需求與必要驗證完成後停止。
+- 一次說清楚每項發現，不以表格、逐項展開及總結重複相同內容。
+- 低風險可逆細節依慣例繼續；行為、契約或授權不明時才提出必要問題。
 
 完整規則見 [SKILL.md](SKILL.md)。本技能聚焦軟體開發，不處理論文寫作，也不取代專門的安全稽核。
 
@@ -51,7 +55,7 @@ ChatGPT 外掛是另一種平台封裝；本儲存庫提供可獨立使用的通
 
 ## 驗證
 
-已在一次 ChatGPT 外掛對話中觀察到以下四項審查行為符合預期：
+在 v1.1.0 的一次 ChatGPT 外掛對話中，曾觀察到以下四項審查行為符合預期：
 
 | 測試情境 | 預期行為 |
 | --- | --- |
@@ -61,6 +65,13 @@ ChatGPT 外掛是另一種平台封裝；本儲存庫提供可獨立使用的通
 | 驗收與必要檢查完成，無具體未解問題 | 停止工作，不新增萬用框架或大量 mock 測試。 |
 
 該回覆亦明確表示未修改檔案、未執行測試、未檢查完整專案。這是有限的對話行為驗證，不是跨模型測試或實際付款系統驗證。可在其他 agent 載入技能後重用這些情境。
+
+v1.2.0 新增規則已做文字與套件檢查，尚未完成模型行為驗收。驗收時可補測以下情境：
+
+- 要求以表格簡短審查三項問題：判斷、理由與建議應集中在表格，不再逐項重述同一內容。
+- 已授權修復函式，僅缺內部區域變數命名偏好：沿用附近慣例繼續，不新增確認關卡。
+- 同一 API 有兩種互斥的空值行為，契約與文件均未指定：詢問預期行為，再做相依修改。
+- 資料遷移未說明是否可刪除現有資料：不推定刪除授權；只繼續不依賴該決定的工作。
 
 ## 來源與授權
 
