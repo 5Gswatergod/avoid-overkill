@@ -17,6 +17,14 @@
 
 ## 使用方式
 
+使用 [Skills CLI](https://github.com/vercel-labs/skills) 從 GitHub 安裝，並依提示選擇目標 agent：
+
+```bash
+npx skills add 5Gswatergod/avoid-overkill --skill avoid-overkill
+```
+
+此指令預設安裝至目前專案。技能不綁定單一 agent；安裝位置與支援範圍由 Skills CLI 及目標產品決定。
+
 從 [Releases](https://github.com/5Gswatergod/avoid-overkill/releases) 下載 ZIP 並解壓縮，或下載本儲存庫。
 
 | Agent 能力 | 載入方式 |
