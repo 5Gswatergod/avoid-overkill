@@ -2,13 +2,14 @@
 
 **Model-agnostic engineering guidance for coding agents.** Deliver the smallest complete solution that meets real requirements, while retaining necessary safeguards and meaningful verification.
 
-Use this skill to avoid **overengineering** during implementation, bug fixes, refactoring, and **code review**. Aim for a **minimal complete solution**, not merely fewer lines of code. It also guides agents to give concise, non-repetitive answers and distinguish reversible implementation choices from decisions that require clarification. The full instructions are in Traditional Chinese, with an English discovery description; they are not tied to a specific model or vendor.
+Use this skill to avoid **overengineering** during implementation, bug fixes, refactoring, and **code review**. Search the current codebase first, then reuse or extend suitable ecosystem solutions when the task warrants it. Aim for a **minimal complete solution**, not merely fewer lines of code. It also guides agents to give concise, non-repetitive answers and distinguish reversible implementation choices from decisions that require clarification. The full instructions are in Traditional Chinese, with an English discovery description; they are not tied to a specific model or vendor.
 
 適用於各種 coding agent 的繁體中文技能：避免過度工程，讓實作、修復、重構及程式碼審查的複雜度與需求、契約和實際風險成比例。
 
 ## 核心原則
 
 - 完成最小完整方案，不把簡單當成省略需求或必要驗證的理由。
+- 依任務規模先查相關既有實作，再決定重用、擴充或自建；簡單修正不做冗長的套件調查。
 - 新增抽象、依賴、校驗、重試、回退前，必須有具體需求或風險依據。
 - 修正根因，沿用既有慣例，不順便擴大重構範圍。
 - 保留授權、信任邊界、資料完整性等必要防護。
@@ -72,6 +73,20 @@ v1.2.0 新增規則已做文字與套件檢查，尚未完成模型行為驗收�
 - 已授權修復函式，僅缺內部區域變數命名偏好：沿用附近慣例繼續，不新增確認關卡。
 - 同一 API 有兩種互斥的空值行為，契約與文件均未指定：詢問預期行為，再做相依修改。
 - 資料遷移未說明是否可刪除現有資料：不推定刪除授權；只繼續不依賴該決定的工作。
+
+v1.3.0 的 Reuse-First 回歸情境如下。這些是假設條件下的決策測試；實際套件能力與專案搜尋仍須在目標環境查證。
+
+| 測試情境 | 預期判斷 |
+| --- | --- |
+| 單行純函式錯誤，相關邏輯已定位 | 直接修正並測試，不啟動大型套件搜尋。 |
+| 專案已有符合契約的同功能函式 | REUSE，避免新增重複實作。 |
+| 一般功能有適用的成熟套件 | 比較覆蓋、相容、維護、授權與成本；合適才 REUSE。 |
+| 幾行簡單工具需要引入大型依賴才可重用 | 允許 BUILD 最小本地實作。 |
+| 現有匯出功能只缺一種格式 | 優先 EXTEND 現有模組。 |
+| 相關內外部方案均無法合理滿足必要需求 | 說明已查方案與原因後 BUILD，限定範圍與驗收。 |
+| 提議刪除必要權限檢查或寫入冪等性 | 保留正確性與安全保障，不視為過度工程。 |
+| 外部搜尋不可用且關鍵方案未知 | 標示外部調查未完成；必要時 INVESTIGATE，不捏造結果。 |
+| 既有功能已滿足驗收 | NO CHANGE，停止無關重構。 |
 
 ## 來源與授權
 
