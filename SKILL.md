@@ -1,6 +1,6 @@
 ---
 name: avoid-overkill
-description: Avoid overengineering in implementation, bug fixes, refactoring, and code review. Deliver a minimal complete solution with necessary safeguards and verification. Model-agnostic guidance for coding agents. 適用於各種 coding agent，不依賴特定模型或平台。防止過度工程與過度防禦性編程。在實作、修復、重構或程式碼審查可能引入不必要的抽象、重試、回退、相容分支、測試樣板或範圍擴張時使用，讓改動與需求及實際風險成比例。不處理論文寫作，也不取代專門的安全稽核。
+description: Avoid overengineering in implementation, bug fixes, refactoring, and code review. Search and reuse suitable existing code or ecosystem solutions before building, in proportion to task size. Deliver a minimal complete solution with necessary safeguards and verification. Model-agnostic guidance for coding agents. 適用於各種 coding agent，不依賴特定模型或平台。防止過度工程與過度防禦性編程。在實作、修復、重構或程式碼審查可能引入不必要的抽象、重試、回退、相容分支、測試樣板或範圍擴張時使用，讓改動與需求及實際風險成比例。不處理論文寫作，也不取代專門的安全稽核。
 license: MIT
 ---
 
@@ -23,8 +23,19 @@ license: MIT
 - 資訊不足時，先查閱與缺口直接相關的既有程式、契約或文件。對低風險、可逆且不改變對外行為、資料契約或授權的實作細節，沿用專案慣例或採合理假設繼續；只需交代影響結果理解的假設，不為一般細節反覆詢問。
 - 若不同答案會實質改變需求行為、資料契約、授權範圍或不可逆後果，且既有資訊無法判定，提出最少必要問題；等待時可繼續不依賴答案的工作。不要以假設補出權限、付款重送、資料刪除或遷移的授權，也不要把未回覆視為同意。
 - 只讀足以理解相關呼叫、資料流與約束的程式及文件。發現跨模組影響再擴大探索，不預設進行全庫稽核。
-- 優先沿用專案慣例、現有功能、既有依賴與標準函式庫。不要為幾行直接邏輯新增依賴，也不要重寫現成可用的功能。
 - 使用者要求審查時提供發現與建議；只有已授權實作或修復時才修改檔案。此技能本身不擴大授權或改變專案政策。
+
+## 先搜尋、再重用、必要時自建
+
+依任務規模遵循 Search → Reuse → Extend → Build → Verify。重用是降低總成本的方法，不是必須採用套件的目標。
+
+- 單行錯誤先定位現有邏輯，直接修正並做針對性檢查；小型工具只需快速查相關函式。一般功能查相關模組與既有依賴；大型子系統或新平台才做有範圍的技術選型。搜尋深度與風險、整合成本及開發成本成比例；有足夠證據就停止，不設固定候選數或審核關卡。
+- 先查專案內相同或相近功能、尚未接入的模組、可修改的程式碼、相關呼叫者及重複的抽象／工具；相關時再查歷史實作、分支或 commit。未檢查相關既有實作前，不建立重複功能。能直接沿用時選 REUSE，能小改時選 EXTEND；也考慮既有依賴與標準函式庫。
+- 專案內沒有合適方案且任務值得外部調查時，查與需求直接相關的官方 SDK／API／框架、成熟套件或開源專案，以及可用的 Plugin、Skill、CLI 或服務。比較功能覆蓋、API 與版本相容性、維護狀態、授權、整合與升級成本、必要的性能與可靠性，以及依賴與供應鏈風險；不以 GitHub Stars 或知名度代替證據，不虛構搜尋結果、能力或 benchmark。若網路或搜尋權限不足，標示外部調查未完成；關鍵證據缺失才選 INVESTIGATE，不宣稱沒有成熟方案。
+- 現成方案只差部分需求時，先比較設定、Adapter、Wrapper、Plugin、Extension、小範圍 Patch 或組合現有能力的成本與長期維護負擔；只補實際缺口，不為功能差異建大型通用框架。
+- 沒有合適方案、必要需求或授權／技術限制無法滿足、整合明顯更貴，或性能／可靠性有可驗證的重大缺口時，可選 BUILD；需求很簡單且本地實作明顯更經濟時亦然。簡短交代檢查過的相關方案、未採用原因、最小範圍和驗收標準；未做外部調查時據實標示，不把未知說成不存在。
+
+判斷時區分：重造輪子應優先採用符合需求的成熟方案；過早抽象應改為直接實作；過多依賴應比較其成本與簡單本地實作；不必要重寫應小改現有功能；過量重用調查應停止並完成簡單任務。合理自建不應被機械阻止；權限、冪等性、資料一致性等必要保障不因減少程式碼而刪除。
 
 ## 新增複雜度前的判斷
 
@@ -69,6 +80,7 @@ license: MIT
 
 ## 回覆方式
 
+- 需要技術選擇時，精簡交代 Existing Solutions、Recommendation（REUSE／EXTEND／BUILD／NO CHANGE；僅關鍵證據不足時用 INVESTIGATE）、Reason、Minimal Implementation 與 Verification。NO CHANGE 表示既有能力已滿足驗收。簡單任務直接交付結果，不強制套格式或展開內部推理。
 - 依任務與問題複雜度決定長度，優先遵守使用者要求的格式。審查時交代有依據的發現與建議；實作時交代改了什麼、驗證結果及相關限制，不逐項朗讀此技能。
 - 每項發現的判斷、理由與建議集中說明一次。若表格或清單已完整表達，不再逐項重述或加一段相同結論；只有補充必要證據、例子或不同層次的資訊時才展開。
 - 簡潔不等於省略影響決策的風險、必要步驟或未驗證事項；沒有新資訊的總結可以省略。
